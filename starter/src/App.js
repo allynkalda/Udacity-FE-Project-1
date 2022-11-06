@@ -12,11 +12,14 @@ const SHELVES = {
   READ: "read"
 }
 
+const storedBooks = JSON.parse(window.localStorage.getItem('allBooks'))
+
 const App = () => {
-  const [ allBooks, setAllBooks ] = useState([])
+  const [ allBooks, setAllBooks ] = useState(storedBooks || [])
   const [ currentlyReading, setCurrentlyReading ] = useState([])
   const [ wantToRead, setWantToRead ] = useState([])
   const [ read, setRead ] = useState([])
+  const [ searchedBooks, setSearchedBooks ] = useState([])
 
   const changeBookStatus = (selectedBook, status) => {
     const newBookInfo = allBooks.map((books) => {
@@ -32,10 +35,12 @@ const App = () => {
   }
 
   useEffect(() => {
-    getAll()
+    if (!allBooks.length) {
+      getAll()
       .then((res) => setAllBooks(res))
       .catch((err) => console.error(err))
-  }, [])
+    }
+  }, [allBooks])
 
   useEffect(() => {
     const currentlyReadingBooks = allBooks.filter((book) => book.shelf === SHELVES.CURRENTLY_READING)
@@ -46,6 +51,8 @@ const App = () => {
     
     const readBooks = allBooks.filter((book) => book.shelf === SHELVES.READ)
     setRead(readBooks)
+
+    window.localStorage.setItem('allBooks', JSON.stringify(allBooks))
   }, [allBooks])
 
   console.log('allBooks', allBooks)
@@ -63,6 +70,8 @@ const App = () => {
         <Route path="/search" element={<Search
             allBooks={allBooks}
             changeBookStatus={changeBookStatus}
+            searchedBooks={searchedBooks}
+            setSearchedBooks={setSearchedBooks}
         />} 
         />
       </Routes>

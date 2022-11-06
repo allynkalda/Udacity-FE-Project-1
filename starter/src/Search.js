@@ -2,13 +2,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import BookCard from "./components/BookCard/BookCard"
 
-const Search = ({ allBooks, changeBookStatus }) => {
-    const [ shownBooks, setShownBooks ] = useState([])
+const Search = ({ allBooks, changeBookStatus, searchedBooks, setSearchedBooks }) => {
 
     const handleInputChange = (event) => {
         const query = event.currentTarget.value;
         const filteredBooks = allBooks.filter((book) => book.title.includes(query))
-        setShownBooks(filteredBooks)
+        setSearchedBooks(filteredBooks)
     }
 
     return (
@@ -30,7 +29,7 @@ const Search = ({ allBooks, changeBookStatus }) => {
           </div>
           <div className="search-books-results">
             <ol className="books-grid">
-                {shownBooks?.map((book) => (
+                {searchedBooks?.map((book) => (
                     <BookCard 
                     key={book.id}
                     bookInfo={book}
