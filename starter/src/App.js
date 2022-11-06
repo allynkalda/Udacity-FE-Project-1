@@ -37,7 +37,7 @@ const App = () => {
     setAllBooks(newBookInfo)
   }
 
-  const storeSearchedBooks = (data) => {
+  const storeSearchedBooks = (data = []) => {
     setSearchedBooks(data)
     window.localStorage.setItem('searchedBooks', JSON.stringify(data))
   }
@@ -53,7 +53,11 @@ const App = () => {
     } else {
       search(query)
       .then((res) => {
-        storeSearchedBooks(res)
+        if (res.error) {
+          storeSearchedBooks([])
+        } else {
+          storeSearchedBooks(res)
+        }
       })
       .catch((err) => console.error(err))
     }
