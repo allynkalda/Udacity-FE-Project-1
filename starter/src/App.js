@@ -1,8 +1,10 @@
-import "./App.css";
 import { useEffect, useState } from "react";
-import BookCard from "./components/BookCard/BookCard";
-import BookShelf from "./components/BookShelf/BookShelf";
+import { Routes, Route } from "react-router-dom";
+
 import { getAll } from "./BooksAPI"
+import Home from "./Home";
+import Search from "./Search";
+import "./App.css";
 
 const SHELVES = {
   CURRENTLY_READING: "currentlyReading",
@@ -10,8 +12,7 @@ const SHELVES = {
   READ: "read"
 }
 
-function App() {
-  const [showSearchPage, setShowSearchpage] = useState(false);
+const App = () => {
   const [ allBooks, setAllBooks ] = useState([])
   const [ currentlyReading, setCurrentlyReading ] = useState([])
   const [ wantToRead, setWantToRead ] = useState([])
@@ -51,43 +52,20 @@ function App() {
   
   return (
     <div className="app">
-      {showSearchPage ? (
-        <div className="search-books">
-          <div className="search-books-bar">
-            <a
-              className="close-search"
-              onClick={() => setShowSearchpage(!showSearchPage)}
-            >
-              Close
-            </a>
-            <div className="search-books-input-wrapper">
-              <input
-                type="text"
-                placeholder="Search by title, author, or ISBN"
-              />
-            </div>
-          </div>
-          <div className="search-books-results">
-            <ol className="books-grid"></ol>
-          </div>
-        </div>
-      ) : (
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <div>
-              <BookShelf books={currentlyReading} changeBookStatus={changeBookStatus} title="Currently Reading" />
-              <BookShelf books={wantToRead} changeBookStatus={changeBookStatus} title="Want to Read" />
-              <BookShelf books={read} changeBookStatus={changeBookStatus} title="Read" />
-            </div>
-          </div>
-          <div className="open-search">
-            <a onClick={() => setShowSearchpage(!showSearchPage)}>Add a book</a>
-          </div>
-        </div>
-      )}
+      <Routes>
+        <Route exact path="/" element={<Home 
+            changeBookStatus={changeBookStatus}
+            currentlyReading={currentlyReading}
+            read={read} 
+            wantToRead={wantToRead}
+        />}
+        />
+        <Route path="/search" element={<Search
+            allBooks={allBooks}
+            changeBookStatus={changeBookStatus}
+        />} 
+        />
+      </Routes>
     </div>
   );
 }
