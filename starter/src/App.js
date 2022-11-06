@@ -54,8 +54,6 @@ const App = () => {
 
     window.localStorage.setItem('allBooks', JSON.stringify(allBooks))
   }, [allBooks])
-
-  console.log('allBooks', allBooks)
   
   return (
     <div className="app">
