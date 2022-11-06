@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
+
 import BookCard from "./components/BookCard/BookCard"
 
-const Search = ({ changeBookStatus, handleInputChange, searchedBooks, }) => {
+const Search = ({ changeBookStatus, handleInputChange, searchedBooks, query }) => {
 
     return (
         <div className="search-books">
@@ -17,6 +18,7 @@ const Search = ({ changeBookStatus, handleInputChange, searchedBooks, }) => {
                 type="text"
                 placeholder="Search by title, author, or ISBN"
                 onChange={handleInputChange}
+                value={query}
               />
             </div>
           </div>

@@ -14,6 +14,7 @@ const SHELVES = {
 
 const storedBooks = JSON.parse(window.localStorage.getItem('allBooks'))
 const storedSearchedBooks = JSON.parse(window.localStorage.getItem('searchedBooks'))
+const searchQuery = JSON.parse(window.localStorage.getItem('searchQuery'))
 
 const App = () => {
   const [ allBooks, setAllBooks ] = useState(storedBooks || [])
@@ -21,6 +22,7 @@ const App = () => {
   const [ wantToRead, setWantToRead ] = useState([])
   const [ read, setRead ] = useState([])
   const [ searchedBooks, setSearchedBooks ] = useState(storedSearchedBooks || [])
+  const [ query, setQuery ] = useState(searchQuery || "")
 
   const changeBookStatus = (selectedBook, status) => {
     const newBookInfo = allBooks.map((books) => {
@@ -35,13 +37,17 @@ const App = () => {
     setAllBooks(newBookInfo)
   }
 
-  const storeSearchedBooks = (data) => {
+  const storeSearchedBooks = (data, query) => {
     setSearchedBooks(data)
     window.localStorage.setItem('searchedBooks', JSON.stringify(data))
   }
 
   const handleInputChange = (event) => {
     const query = event.currentTarget.value;
+
+    setQuery(event.currentTarget.value)
+    window.localStorage.setItem('searchQuery', JSON.stringify(event.currentTarget.value))
+
     if (!query) {
       storeSearchedBooks([])
     } else {
@@ -86,6 +92,7 @@ const App = () => {
             changeBookStatus={changeBookStatus}
             searchedBooks={searchedBooks}
             handleInputChange={handleInputChange}
+            query={query}
         />} 
         />
       </Routes>
