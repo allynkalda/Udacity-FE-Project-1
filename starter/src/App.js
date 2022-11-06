@@ -13,13 +13,14 @@ const SHELVES = {
 }
 
 const storedBooks = JSON.parse(window.localStorage.getItem('allBooks'))
+const storedSearchedBooks = JSON.parse(window.localStorage.getItem('searchedBooks'))
 
 const App = () => {
   const [ allBooks, setAllBooks ] = useState(storedBooks || [])
   const [ currentlyReading, setCurrentlyReading ] = useState([])
   const [ wantToRead, setWantToRead ] = useState([])
   const [ read, setRead ] = useState([])
-  const [ searchedBooks, setSearchedBooks ] = useState([])
+  const [ searchedBooks, setSearchedBooks ] = useState(storedSearchedBooks || [])
 
   const changeBookStatus = (selectedBook, status) => {
     const newBookInfo = allBooks.map((books) => {
@@ -33,6 +34,21 @@ const App = () => {
     })
     setAllBooks(newBookInfo)
   }
+
+  const storeSearchedBooks = (data) => {
+    setSearchedBooks(data)
+    window.localStorage.setItem('searchedBooks', JSON.stringify(data))
+  }
+
+  const handleInputChange = (event) => {
+    const query = event.currentTarget.value;
+    if (!query) {
+      storeSearchedBooks([])
+    } else {
+      const filteredBooks = allBooks.filter((book) => book.title.includes(query))
+      storeSearchedBooks(filteredBooks)
+    }
+}
 
   useEffect(() => {
     if (!allBooks.length) {
@@ -69,7 +85,7 @@ const App = () => {
             allBooks={allBooks}
             changeBookStatus={changeBookStatus}
             searchedBooks={searchedBooks}
-            setSearchedBooks={setSearchedBooks}
+            handleInputChange={handleInputChange}
         />} 
         />
       </Routes>

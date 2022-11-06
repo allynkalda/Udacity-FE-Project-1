@@ -1,13 +1,7 @@
 import { Link } from "react-router-dom";
 import BookCard from "./components/BookCard/BookCard"
 
-const Search = ({ allBooks, changeBookStatus, searchedBooks, setSearchedBooks }) => {
-
-    const handleInputChange = (event) => {
-        const query = event.currentTarget.value;
-        const filteredBooks = allBooks.filter((book) => book.title.includes(query))
-        setSearchedBooks(filteredBooks)
-    }
+const Search = ({ changeBookStatus, handleInputChange, searchedBooks, }) => {
 
     return (
         <div className="search-books">
