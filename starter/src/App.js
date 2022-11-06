@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { getAll } from "./BooksAPI"
+import { getAll, search } from "./BooksAPI"
 import Home from "./Home";
 import Search from "./Search";
 import "./App.css";
@@ -37,7 +37,7 @@ const App = () => {
     setAllBooks(newBookInfo)
   }
 
-  const storeSearchedBooks = (data, query) => {
+  const storeSearchedBooks = (data) => {
     setSearchedBooks(data)
     window.localStorage.setItem('searchedBooks', JSON.stringify(data))
   }
@@ -51,8 +51,11 @@ const App = () => {
     if (!query) {
       storeSearchedBooks([])
     } else {
-      const filteredBooks = allBooks.filter((book) => book.title.includes(query))
-      storeSearchedBooks(filteredBooks)
+      search(query)
+      .then((res) => {
+        storeSearchedBooks(res)
+      })
+      .catch((err) => console.error(err))
     }
 }
 
