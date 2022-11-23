@@ -5,12 +5,7 @@ import { getAll, search } from "./BooksAPI"
 import Home from "./Home";
 import Search from "./Search";
 import "./App.css";
-
-const SHELVES = {
-  CURRENTLY_READING: "currentlyReading",
-  WANT_TO_READ: "wantToRead",
-  READ: "read"
-}
+import { SHELVES } from "./constants/shelves";
 
 const storedBooks = JSON.parse(window.localStorage.getItem('allBooks'))
 const storedSearchedBooks = JSON.parse(window.localStorage.getItem('searchedBooks'))
@@ -45,33 +40,26 @@ const App = () => {
   const handleInputChange = (event) => {
     const query = event.currentTarget.value;
 
-    setQuery(event.currentTarget.value)
-    window.localStorage.setItem('searchQuery', JSON.stringify(event.currentTarget.value))
+    setQuery(query)
+    window.localStorage.setItem('searchQuery', JSON.stringify(query))
 
     if (!query) {
       storeSearchedBooks([])
     } else {
       search(query)
-      .then((res) => {
-        if (res.error) {
-          storeSearchedBooks([])
-        } else {
-          storeSearchedBooks(res)
-        }
-      })
+      .then((res) => storeSearchedBooks(res.error ? [] : res))
       .catch((err) => console.error(err))
     }
-}
+  }
 
   useEffect(() => {
+
     if (!allBooks.length) {
       getAll()
       .then((res) => setAllBooks(res))
       .catch((err) => console.error(err))
     }
-  }, [allBooks])
 
-  useEffect(() => {
     const currentlyReadingBooks = allBooks.filter((book) => book.shelf === SHELVES.CURRENTLY_READING)
     setCurrentlyReading(currentlyReadingBooks)
 
@@ -100,6 +88,7 @@ const App = () => {
             searchedBooks={searchedBooks}
             handleInputChange={handleInputChange}
             query={query}
+            setAllBooks={setAllBooks}
         />} 
         />
       </Routes>

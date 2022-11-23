@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import BookCard from "./components/BookCard/BookCard"
 
-const Search = ({ changeBookStatus, handleInputChange, searchedBooks, query }) => {
+const Search = ({ allBooks, changeBookStatus, handleInputChange, searchedBooks, query, setAllBooks }) => {
 
     return (
         <div className="search-books">
@@ -25,10 +25,12 @@ const Search = ({ changeBookStatus, handleInputChange, searchedBooks, query }) =
           <div className="search-books-results">
             <ol className="books-grid">
                 {searchedBooks?.map((book) => (
-                    <BookCard 
+                    <BookCard
+                    allBooks={allBooks}
                     key={book.id}
                     bookInfo={book}
                     changeBookStatus={changeBookStatus}
+                    setAllBooks={setAllBooks}
                     />
                 )
                 )}
