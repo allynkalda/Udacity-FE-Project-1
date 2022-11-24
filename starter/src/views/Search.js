@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import BookCard from "./components/BookCard/BookCard"
+import BookCard from "../components/BookCard/BookCard"
 
 const Search = ({ allBooks, changeBookStatus, handleInputChange, searchedBooks, query, setAllBooks }) => {
 

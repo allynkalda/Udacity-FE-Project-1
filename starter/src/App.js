@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import { getAll, search } from "./BooksAPI"
-import Home from "./Home";
-import Search from "./Search";
+import Home from "./views/Home";
+import Search from "./views/Search";
 import "./App.css";
 import { SHELVES } from "./constants/shelves";
 
@@ -13,11 +13,9 @@ const searchQuery = JSON.parse(window.localStorage.getItem('searchQuery'))
 
 const App = () => {
   const [ allBooks, setAllBooks ] = useState(storedBooks || [])
-  const [ currentlyReading, setCurrentlyReading ] = useState([])
-  const [ wantToRead, setWantToRead ] = useState([])
-  const [ read, setRead ] = useState([])
   const [ searchedBooks, setSearchedBooks ] = useState(storedSearchedBooks || [])
   const [ query, setQuery ] = useState(searchQuery || "")
+  const [ categorizedBooks, setCategorizedBooks ] = useState({})
 
   const changeBookStatus = (selectedBook, status) => {
     const newBookInfo = allBooks.map((books) => {
@@ -60,14 +58,11 @@ const App = () => {
       .catch((err) => console.error(err))
     }
 
-    const currentlyReadingBooks = allBooks.filter((book) => book.shelf === SHELVES.CURRENTLY_READING)
-    setCurrentlyReading(currentlyReadingBooks)
-
-    const wantToReadBooks = allBooks.filter((book) => book.shelf === SHELVES.WANT_TO_READ)
-    setWantToRead(wantToReadBooks)
-    
-    const readBooks = allBooks.filter((book) => book.shelf === SHELVES.READ)
-    setRead(readBooks)
+    const categorizedData = {}
+    Object.values(SHELVES).forEach((category) => {
+      categorizedData[category] = allBooks.filter((book) => book.shelf === category)
+    })
+    setCategorizedBooks(categorizedData)
 
     window.localStorage.setItem('allBooks', JSON.stringify(allBooks))
   }, [allBooks])
@@ -77,9 +72,7 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<Home 
             changeBookStatus={changeBookStatus}
-            currentlyReading={currentlyReading}
-            read={read} 
-            wantToRead={wantToRead}
+            categorizedBooks={categorizedBooks}
         />}
         />
         <Route path="/search" element={<Search
