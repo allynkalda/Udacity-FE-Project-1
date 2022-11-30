@@ -32,7 +32,8 @@ const BookCard = ({
         <li>
         <div className="book">
           <div className="book-top">
-            <div
+            {bookInfo?.imageLinks?.thumbnail && (
+              <div
               className="book-cover"
               style={{
                 width: 128,
@@ -41,6 +42,7 @@ const BookCard = ({
                   `url(${bookInfo.imageLinks.thumbnail})`,
               }}
             ></div>
+            )}
             <div className="book-shelf-changer">
               <select value={status} onChange={(e) => handleClick(e)}>
                 <option value="none" disabled>
@@ -55,7 +57,7 @@ const BookCard = ({
             </div>
           </div>
           <div className="book-title">{bookInfo.title}</div>
-          <div className="book-authors">{bookInfo?.authors.map((author, i) => i === bookInfo?.authors.length - 1 ? `${author}` : `${author}, `) }</div>
+          <div className="book-authors">{bookInfo?.authors?.map((author, i) => i === bookInfo?.authors.length - 1 ? `${author}` : `${author}, `) }</div>
         </div>
       </li>
     )
