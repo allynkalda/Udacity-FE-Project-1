@@ -8,7 +8,10 @@ const BookCard = ({
     changeBookStatus,
     setAllBooks
 }) => {
-    const [ status, setStatus ] = useState(bookInfo.shelf || "none")
+    const bookWithShelf = allBooks?.filter((book) => book.id === bookInfo.id)
+    const updatedStatus = bookWithShelf ? bookWithShelf[0]?.shelf : "none"
+    const [ status, setStatus ] = useState(updatedStatus)
+    console.log('bookWithShelf',bookWithShelf)
 
     const handleClick = (e) => {
       e.preventDefault()
