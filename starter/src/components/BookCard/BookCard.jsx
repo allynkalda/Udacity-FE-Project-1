@@ -55,7 +55,7 @@ const BookCard = ({
             </div>
           </div>
           <div className="book-title">{bookInfo.title}</div>
-          <div className="book-authors">{bookInfo?.authors && bookInfo?.authors[0]}</div>
+          <div className="book-authors">{bookInfo?.authors.map((author, i) => i === bookInfo?.authors.length - 1 ? `${author}` : `${author}, `) }</div>
         </div>
       </li>
     )
